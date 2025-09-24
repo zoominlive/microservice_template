@@ -11,46 +11,96 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 
-// Test tokens for different user roles
-// Generate these using JWT.io or your auth service
-const TEST_TOKENS = {
+// JWT test secret - this should match the server's JWT_SECRET
+const TEST_JWT_SECRET = "dev-secret-key-for-testing-only";
+
+// Function to create test JWT tokens
+function createTestJWT(payload: any): string {
+  // Simple JWT creation for development (normally you'd use jsonwebtoken library)
+  const header = { alg: "HS256", typ: "JWT" };
+  const headerEncoded = btoa(JSON.stringify(header)).replace(/=/g, '');
+  const payloadEncoded = btoa(JSON.stringify(payload)).replace(/=/g, '');
+  
+  // For development, we'll create a simple signature (not cryptographically secure)
+  // In a real app, you'd use proper HMAC-SHA256
+  const data = headerEncoded + "." + payloadEncoded;
+  const signature = btoa(TEST_JWT_SECRET + data).replace(/=/g, '');
+  
+  return `${headerEncoded}.${payloadEncoded}.${signature}`;
+}
+
+// Test user configurations - tokens will be generated dynamically
+const TEST_USERS = {
   admin: {
     label: "Admin User",
-    token: "YOUR_ADMIN_TOKEN_HERE",
     role: "Admin",
     username: "admin@example.com",
+    userId: "admin-123",
+    tenantId: "dev_tenant_001",
+    locations: ["Main Campus", "North Branch"],
   },
   teacher: {
     label: "Teacher User",
-    token: "YOUR_TEACHER_TOKEN_HERE",
     role: "Teacher",
-    username: "teacher@example.com",
+    username: "teacher@example.com", 
+    userId: "teacher-456",
+    tenantId: "dev_tenant_001",
+    locations: ["Main Campus"],
   },
   director: {
     label: "Director User",
-    token: "YOUR_DIRECTOR_TOKEN_HERE",
     role: "Director",
     username: "director@example.com",
+    userId: "director-789",
+    tenantId: "dev_tenant_001",
+    locations: ["Main Campus", "North Branch"],
   },
   assistant_director: {
     label: "Assistant Director",
-    token: "YOUR_ASSISTANT_DIRECTOR_TOKEN_HERE",
     role: "assistant_director",
     username: "assistant_director@example.com",
+    userId: "asst_dir-012",
+    tenantId: "dev_tenant_001",
+    locations: ["Main Campus"],
   },
   superadmin: {
     label: "Super Admin User",
-    token: "YOUR_SUPERADMIN_TOKEN_HERE",
     role: "SuperAdmin",
     username: "superadmin@example.com",
+    userId: "superadmin-345",
+    tenantId: "dev_tenant_001",
+    locations: ["Main Campus", "North Branch", "South Campus"],
   },
   parent: {
     label: "Parent User",
-    token: "YOUR_PARENT_TOKEN_HERE",
     role: "Parent",
     username: "parent@example.com",
+    userId: "parent-678",
+    tenantId: "dev_tenant_001",
+    locations: ["Main Campus"],
   },
 };
+
+// Generate tokens for each user
+const TEST_TOKENS = Object.fromEntries(
+  Object.entries(TEST_USERS).map(([key, user]) => [
+    key,
+    {
+      ...user,
+      token: createTestJWT({
+        userId: user.userId,
+        userFirstName: user.label.split(' ')[0],
+        userLastName: user.label.split(' ')[1] || 'User',
+        username: user.username,
+        role: user.role,
+        tenantId: user.tenantId,
+        locations: user.locations,
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60), // 24 hours
+      })
+    }
+  ])
+);
 
 type UserType = keyof typeof TEST_TOKENS;
 
