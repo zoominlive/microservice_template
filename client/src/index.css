@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(248, 50%, 99%);
+  --foreground: hsl(46, 8%, 18%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 13%, 45%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(46, 8%, 18%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(46, 8%, 18%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(358, 100%, 69%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(174, 58%, 65%);
+  --secondary-foreground: hsl(46, 8%, 18%);
+  --accent: hsl(200, 60%, 63%);
+  --accent-foreground: hsl(46, 8%, 18%);
+  --success: hsl(144, 35%, 72%);
+  --success-foreground: hsl(46, 8%, 18%);
+  --warning: hsl(48, 100%, 79%);
+  --warning-foreground: hsl(46, 8%, 18%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(46, 8%, 18%);
+  --radius: 0.75rem;
+
+  /* Custom childcare colors */
+  --coral-red: hsl(358, 100%, 69%);
+  --turquoise: hsl(174, 58%, 65%);
+  --sky-blue: hsl(200, 60%, 63%);
+  --mint-green: hsl(144, 35%, 72%);
+  --soft-yellow: hsl(48, 100%, 79%);
+  --light-grey: hsl(210, 17%, 98%);
+  --charcoal: hsl(46, 8%, 18%);
+}
+
+/* Custom animations */
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(147, 51, 234, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.8));
+  }
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Heart favorite animations */
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.3); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes heartGlow {
+  0% { filter: drop-shadow(0 0 0 transparent); }
+  50% { filter: drop-shadow(0 0 8px rgba(255, 99, 132, 0.8)); }
+  100% { filter: drop-shadow(0 0 0 transparent); }
+}
+
+.animate-heart-pulse {
+  animation: heartPulse 0.5s ease-out, heartGlow 0.5s ease-out;
+}
+
+.dark {
+  --background: hsl(240, 10%, 4%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 4%, 16%);
+  --muted-foreground: hsl(240, 5%, 65%);
+  --popover: hsl(240, 10%, 4%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 4%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 4%, 16%);
+  --input: hsl(240, 4%, 16%);
+  --primary: hsl(358, 100%, 69%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(240, 4%, 16%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 4%, 16%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 63%, 31%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 5%, 84%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Roboto', 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  /* Material Design inspired shadows */
+  .material-shadow {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+  }
+
+  .material-shadow-hover {
+    transition: all 0.3s ease;
+  }
+
+  .material-shadow-hover:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15), 0 12px 24px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Activity card gradients */
+  .activity-social {
+    background: linear-gradient(135deg, var(--mint-green), var(--sky-blue));
+  }
+
+  .activity-emotional {
+    background: linear-gradient(135deg, var(--coral-red), var(--soft-yellow));
+  }
+
+  .activity-cognitive {
+    background: linear-gradient(135deg, var(--sky-blue), var(--turquoise));
+  }
+
+  .activity-physical {
+    background: linear-gradient(135deg, var(--turquoise), var(--mint-green));
+  }
+
+  .activity-art {
+    background: linear-gradient(135deg, var(--soft-yellow), var(--coral-red));
+  }
+
+  /* Status indicators */
+  .status-draft {
+    @apply bg-gray-100 text-gray-800;
+  }
+
+  .status-submitted {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  .status-approved {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .status-rejected {
+    @apply bg-red-100 text-red-800;
+  }
+}
+
+@layer utilities {
+  .text-coral-red {
+    color: var(--coral-red);
+  }
+
+  .text-turquoise {
+    color: var(--turquoise);
+  }
+
+  .text-sky-blue {
+    color: var(--sky-blue);
+  }
+
+  .text-mint-green {
+    color: var(--mint-green);
+  }
+
+  .bg-coral-red {
+    background-color: var(--coral-red);
+  }
+
+  .bg-turquoise {
+    background-color: var(--turquoise);
+  }
+
+  .bg-sky-blue {
+    background-color: var(--sky-blue);
+  }
+
+  .bg-mint-green {
+    background-color: var(--mint-green);
+  }
+}
