@@ -99,7 +99,7 @@ export class MemStorage implements IStorage {
       firstName: user.firstName || null,
       lastName: user.lastName || null,
       role: user.role,
-      locations: user.locations || [],
+      locations: (user.locations || []) as string[],
       lastLoginDate: new Date(),
       firstLoginDate: existing?.firstLoginDate || new Date(),
       loginCount: (existing?.loginCount || 0) + 1,
@@ -139,8 +139,8 @@ export class MemStorage implements IStorage {
       id: existing?.id || id,
       tenantId: override.tenantId,
       permissionName: override.permissionName,
-      rolesRequired: override.rolesRequired || [],
-      autoApproveRoles: override.autoApproveRoles || [],
+      rolesRequired: (override.rolesRequired || []) as string[],
+      autoApproveRoles: (override.autoApproveRoles || []) as string[],
       createdAt: existing?.createdAt || new Date(),
       updatedAt: new Date(),
     };
@@ -150,7 +150,7 @@ export class MemStorage implements IStorage {
   }
   
   async deletePermissionOverride(id: string, tenantId: string): Promise<void> {
-    for (const [key, value] of this.permissionOverrides.entries()) {
+    for (const [key, value] of Array.from(this.permissionOverrides.entries())) {
       if (value.id === id && value.tenantId === tenantId) {
         this.permissionOverrides.delete(key);
         break;
@@ -228,7 +228,7 @@ export class MemStorage implements IStorage {
     if (params.locationId) {
       results = results.filter((item) => 
         item.locationId === params.locationId ||
-        item.locationIds?.includes(params.locationId)
+        (item.locationIds as string[])?.includes(params.locationId!)
       );
     }
     
@@ -255,7 +255,7 @@ export class MemStorage implements IStorage {
       content: data.content || null,
       metadata: data.metadata || null,
       locationId: data.locationId || null,
-      locationIds: data.locationIds || null,
+      locationIds: (data.locationIds || null) as string[] | null,
       requiresApproval: data.requiresApproval || false,
       approvedBy: data.approvedBy || null,
       approvedAt: data.approvedAt || null,
@@ -279,6 +279,7 @@ export class MemStorage implements IStorage {
       tenantId: existing.tenantId, // Can't change tenant
       createdAt: existing.createdAt,
       updatedAt: new Date(),
+      locationIds: (updates.locationIds || existing.locationIds) as string[] | null,
     };
     
     this.data.set(id, updated);
