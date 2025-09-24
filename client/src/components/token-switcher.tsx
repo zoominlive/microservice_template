@@ -104,8 +104,35 @@ const TEST_TOKENS = Object.fromEntries(
 
 type UserType = keyof typeof TEST_TOKENS;
 
+// Function to determine which user is currently active from stored token
+function getCurrentUserFromToken(): UserType {
+  try {
+    const storedToken = localStorage.getItem("authToken");
+    if (!storedToken) return "teacher"; // Default fallback
+    
+    // Simple decode (just get the payload part)
+    const parts = storedToken.split('.');
+    if (parts.length !== 3) return "teacher";
+    
+    const payload = JSON.parse(atob(parts[1]));
+    
+    // Find which test user matches this token's role and userId
+    for (const [key, user] of Object.entries(TEST_USERS)) {
+      if (user.role === payload.role && user.userId === payload.userId) {
+        return key as UserType;
+      }
+    }
+    
+    // Fallback to teacher if no match found
+    return "teacher";
+  } catch (error) {
+    console.warn("Could not determine current user from token:", error);
+    return "teacher";
+  }
+}
+
 export function TokenSwitcher() {
-  const [currentUser, setCurrentUser] = React.useState<UserType>("teacher");
+  const [currentUser, setCurrentUser] = React.useState<UserType>(() => getCurrentUserFromToken());
   const { toast } = useToast();
 
   const setAuthToken = (token: string) => {
